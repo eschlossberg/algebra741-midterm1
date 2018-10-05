@@ -57,6 +57,19 @@ class SymmetricGroup:
             out_str += "}\n"
         return out_str
 
+    def cosets(self, *elements: Permutation, left=True):
+        cosets = []
+        for x in self.elements:
+            coset = set()
+            for element in elements:
+                if left:
+                    coset.add(element * x)
+                else:
+                    coset.add(x * element)
+            if coset not in cosets:
+                cosets.append(coset)
+        return cosets
+
     @staticmethod
     def generate(*generators: Permutation):
         """
