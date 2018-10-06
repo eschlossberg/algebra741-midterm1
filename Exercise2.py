@@ -23,15 +23,9 @@ print(G)
 # Results show that G is the alternating group A_4
 
 
-
-
 def display_cosets(cosets):
     for coset in cosets:
-        st = "{"
-        for obj in coset:
-            st += str(obj) + ", "
-        st = st.rstrip(", ") + "}"
-        print(st)
+        print(str(coset))
 
 
 # Calculate H1=<(123)>

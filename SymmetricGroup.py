@@ -60,12 +60,7 @@ class SymmetricGroup:
     def cosets(self, *elements: Permutation, left=True):
         cosets = []
         for x in self.elements:
-            coset = set()
-            for element in elements:
-                if left:
-                    coset.add(element * x)
-                else:
-                    coset.add(x * element)
+            coset = Coset(x, *elements, left=left)
             if coset not in cosets:
                 cosets.append(coset)
         return cosets
@@ -89,3 +84,29 @@ class SymmetricGroup:
             old_perms = perms.copy()
         g = SymmetricGroup(max(len(perm) for perm in perms) + 1, subgroup=True, elements=perms)
         return g
+
+
+class Coset:
+    def __init__(self, representative: Permutation, *subset: Permutation, left=True):
+        self.rep = representative
+        self.reps = set()
+        self.subset = subset
+        for x in subset:
+            if left:
+                self.reps.add(x * representative)
+            else:
+                self.reps.add(representative * x)
+
+    def __eq__(self, other):
+        return self.reps == other.reps
+
+    def __str__(self):
+        st = "{"
+        for obj in self.reps:
+           st += str(obj) + ", "
+        st = st.rstrip(", ") + "}"
+        return st
+
+    def __mul__(self, other):
+        rep = self.rep * other.rep
+        return Coset(rep, *self.subset)
