@@ -123,3 +123,16 @@ class Permutation:
             cycle += ")"
             out_str += cycle
         return out_str if len(out_str) > 0 else "(1)"
+
+    def act(self, l: list):
+        """
+        Permutes a list by acting on the indices
+        :param l: the list to be permuted
+        :return: the new list after each element has been permuted
+        """
+        if max(self.action.keys()) > len(l):
+            raise IllegalActionException
+        new_list = []
+        for i in range(len(l)):
+            new_list.append(l[self[i] - 1])
+        return new_list
