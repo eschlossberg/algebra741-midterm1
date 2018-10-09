@@ -48,8 +48,6 @@ V = new_V
 
 
 def permute(p: Permutation, obj):
-    if type(obj) == int:
-        return p[obj]
     e1, e2 = obj
     e1 = list(e1)
     e2 = list(e2)
@@ -60,7 +58,7 @@ def permute(p: Permutation, obj):
 
 # Calculate the number of orbits. Note that any element of _G Hom((E,2),V) must preserve orbits
 # Thus we can look at orbits instead of elements for the calculation
-# Otherwise the calculation would be on the order of 8^276, which would exceed the heat death of the universe
+# Otherwise the calculation would be on the order of 8^66, which would exceed the heat death of the universe
 orbits = []
 for e in E2:
     orbit = set()
@@ -71,30 +69,29 @@ for e in E2:
     if orbit not in orbits:
         orbits.append(orbit)
 print("There are", len(orbits), "orbits in (E,2) of sizes:")
-s = 0
 for orbit in orbits:
-    # Orbits are double length since the value returned from permute is an ordered pair, hence
-    # if (e1, e2) is in an orbit then so is (e2, e1)
     print(int(len(orbit)))
 
-prod = 1
+product = 1
 for orbit in orbits:
     rep = choice(list(orbit))  # The representative of the orbit
     valid_maps = 0
     for v in V:
+        # Consider the map sending the representative to a given vertex
         mapping = {rep: v}
         valid = True
+        # Check chosen mapping holds under the group action
         for perm in G.elements:
-            permuted_rep = permute(perm, rep)
-            permuted_vert = permute(perm, v)
+            permuted_rep = frozenset(permute(perm, rep))
+            permuted_vert = perm[v]
             if permuted_rep in mapping.keys() and \
                     mapping[permuted_rep] != permuted_vert:
                 valid = False
-                print("Invalid mapping:", perm, rep, permuted_rep, v, permuted_vert, mapping[permuted_rep])
+                print("Invalid mapping:", perm, list(rep), list(permuted_rep), v, permuted_vert, mapping[permuted_rep])
                 break
             elif permuted_rep not in mapping.keys():
                 mapping[permuted_rep] = permuted_vert
         if valid:
             valid_maps += 1
-    prod *= valid_maps
-print(prod)
+    product *= valid_maps
+print(product)

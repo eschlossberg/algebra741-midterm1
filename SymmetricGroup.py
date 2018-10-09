@@ -18,6 +18,8 @@ class SymmetricGroup:
         if subgroup:
             for elmnt in elements:
                 self.elements.add(elmnt)
+            p = choice(list(self.elements))
+            self.id = ~p*p
             return
 
         # Generate the permutations
